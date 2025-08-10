@@ -1,12 +1,11 @@
 """Обёртка для обращения к LLM и генерации рецептов."""
 
 from pathlib import Path
-from typing import List
 
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai.error import OpenAIError, RateLimitError
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ConfigDict, ValidationError
 
 
 load_dotenv()  # загрузка переменных окружения из .env
@@ -32,17 +31,21 @@ class Nutrition(BaseModel):
     fat: float
     carbs: float
 
+    model_config = ConfigDict(extra="forbid")
+
 
 class Recipe(BaseModel):
     """Модель итогового рецепта."""
 
     name: str
-    ingredients: List[str]
-    steps: List[str]
+    ingredients: list[str]
+    steps: list[str]
     nutrition: Nutrition
     cholesterol_mg: int
     glycemic_index: int
     approx: bool | None = None
+
+    model_config = ConfigDict(extra="forbid")
 
 
 class RecipeLLMError(Exception):

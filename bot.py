@@ -14,7 +14,7 @@ from telegram.ext import (
     filters,
 )
 
-from formatters import format_recipe
+from formatters import format_markdown
 from llm_client import RecipeLLM, RecipeLLMError
 
 
@@ -67,7 +67,7 @@ async def receive_mood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
 
     try:
         recipe = RecipeLLM.generate(ingredients, mood)
-        message = format_recipe(recipe)
+        message = format_markdown(recipe)
         await update.message.reply_text(
             message, parse_mode="Markdown", reply_markup=ReplyKeyboardRemove()
         )
