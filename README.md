@@ -1,20 +1,23 @@
 # tg-recipe-bot
 
-A minimal Telegram bot that generates cooking recipes from provided ingredients using an LLM.
 
-## Setup
+Минимальный Telegram-бот, который генерирует кулинарные рецепты из указанных ингредиентов с помощью LLM.
 
-1. Copy `.env.example` to `.env` and fill in the tokens.
-2. Install dependencies:
+## Установка
+
+1. Скопируйте `.env.example` в `.env` и заполните токены.
+2. Установите зависимости:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the bot:
+3. Запустите бота:
+
    ```bash
    make run
    ```
 
-## Development
 
-- `make format` – format the code with Black
-- `make lint` – lint the code with Ruff
+## Разработка
+
+- `make format` – форматирование кода с помощью Black
+- `make lint` – проверка стиля с помощью Ruff

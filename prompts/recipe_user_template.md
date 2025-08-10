@@ -1,4 +1,5 @@
-I have the following ingredients:
+
+У меня есть следующие ингредиенты:
 {ingredients}
 
-Please suggest a recipe using them.
+
