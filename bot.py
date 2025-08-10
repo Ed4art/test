@@ -1,9 +1,9 @@
-
 """Простой Telegram-бот для генерации рецептов."""
-
 
 import logging
 import os
+
+from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -15,6 +15,7 @@ from telegram.ext import (
 
 from llm_client import generate_recipe
 
+load_dotenv()  # загрузка переменных окружения из .env
 
 logging.basicConfig(level=logging.INFO)  # настройка логирования
 
@@ -23,24 +24,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Приветственное сообщение для пользователя."""
     await update.message.reply_text(
         "Отправьте список ингредиентов, и я предложу подходящий рецепт."
-
     )
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-
     """Обрабатывает список ингредиентов и отвечает рецептом."""
-
     ingredients = update.message.text
     recipe = generate_recipe(ingredients)
     await update.message.reply_text(recipe)
 
 
 def main() -> None:
-
     """Запускает приложение и регистрирует обработчики."""
-
-    token = os.environ["TELEGRAM_BOT_TOKEN"]
+    token = os.environ["TELEGRAM_TOKEN"]
     application = ApplicationBuilder().token(token).build()
 
     application.add_handler(CommandHandler("start", start))
