@@ -7,7 +7,12 @@ requires-python = ">=3.10"
 dependencies = [
     "python-telegram-bot>=21.0.0",
     "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
 ]
+
+[project.optional-dependencies]
+validation = ["pydantic>=2.0"]
+dev = ["black>=23.0", "ruff>=0.0.289"]
 
 [build-system]
 requires = ["setuptools", "wheel"]
