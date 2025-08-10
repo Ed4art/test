@@ -5,9 +5,10 @@ from telegram.helpers import escape_markdown
 from llm_client import Recipe
 
 
-def format_recipe(recipe: Recipe) -> str:
+def format_markdown(data: Recipe) -> str:
     """Превращает объект рецепта в Markdown-строку."""
 
+    recipe = data
     lines: list[str] = []
 
     lines.append(f"*{escape_markdown(recipe.name, version=1)}*")
@@ -35,4 +36,4 @@ def format_recipe(recipe: Recipe) -> str:
     return "\n".join(lines)
 
 
-__all__ = ["format_recipe"]
+__all__ = ["format_markdown"]
