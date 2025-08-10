@@ -1,0 +1,22 @@
+# байткод / оптимизированные / DLL файлы
+__pycache__/
+*.py[cod]
+*$py.class
+
+# распространение / упаковка
+.Python
+build/
+dist/
+*.egg-info/
+
+# виртуальные окружения
+.venv/
+venv/
+ENV/
+
+# переменные окружения
+.env
+
+# МакОС
+.DS_Store
+.ruff_cache/
