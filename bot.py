@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)  # настройка логирован
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Приветственное сообщение для пользователя."""
     await update.message.reply_text(
-        "Send me the ingredients you have, and I'll suggest a recipe."
+        "Отправьте список ингредиентов, и я предложу подходящий рецепт."
     )
 
 
