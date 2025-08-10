@@ -6,7 +6,7 @@
 
 Требования к стеку:
 - python-telegram-bot ≥ 21, long polling.
-- Официальный OpenAI Python SDK; использовать Chat Completions или Responses API (Completions legacy не применять).
+- Официальный DeepSeek Python SDK; использовать Chat Completions или Responses API (Completions legacy не применять).
 - В идеале Structured Outputs/JSON Schema; если недоступно — валидировать JSON pydantic’ом.
 
 Сборка репозитория (в этом порядке):
