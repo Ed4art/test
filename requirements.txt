@@ -1,0 +1,4 @@
+python-telegram-bot>=21.0.0
+deepseek>=1.0.0
+black>=23.0
+ruff>=0.0.289
