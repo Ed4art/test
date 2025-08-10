@@ -3,7 +3,6 @@
 import logging
 import os
 
-from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -15,7 +14,6 @@ from telegram.ext import (
 
 from llm_client import generate_recipe
 
-load_dotenv()  # загрузка переменных окружения из .env
 
 logging.basicConfig(level=logging.INFO)  # настройка логирования
 
@@ -36,7 +34,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 def main() -> None:
     """Запускает приложение и регистрирует обработчики."""
-    token = os.environ["TELEGRAM_TOKEN"]
+
     application = ApplicationBuilder().token(token).build()
 
     application.add_handler(CommandHandler("start", start))
