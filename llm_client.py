@@ -3,8 +3,7 @@
 from pathlib import Path
 
 from dotenv import load_dotenv
-from openai import OpenAI
-from openai.error import OpenAIError, RateLimitError
+from deepseek import DeepSeekAPI
 from pydantic import BaseModel, ConfigDict, ValidationError
 
 
@@ -20,7 +19,7 @@ def _load_prompt(name: str) -> str:
 SYSTEM_PROMPT = _load_prompt("recipe_system.md")
 USER_TEMPLATE = _load_prompt("recipe_user_template.md")
 
-_client = OpenAI()  # инициализация клиента с API-ключом из окружения
+_client = DeepSeekAPI()  # инициализация клиента с API-ключом из окружения
 
 
 class Nutrition(BaseModel):
@@ -63,34 +62,35 @@ class RecipeLLM:
             "{{mood}}", mood
         )
 
-        messages = [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt},
-        ]
+        messages: list[dict[str, str]] = []
 
         for attempt in range(2):
             try:
-                response = _client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=messages,
-                )
-            except (RateLimitError, OpenAIError) as exc:
+                if attempt == 0:
+                    content = _client.chat_completion(
+                        prompt=prompt, prompt_sys=SYSTEM_PROMPT
+                    )
+                else:
+                    content = _client.chat_completion(prompt=messages)
+            except Exception as exc:  # noqa: BLE001
                 raise RecipeLLMError("Сервис недоступен, попробуйте позже") from exc
 
-            content = response.choices[0].message.content.strip()
-
             try:
-                return Recipe.model_validate_json(content)
+                return Recipe.model_validate_json(content.strip())
             except ValidationError:
                 if attempt == 0:
-                    messages.append({"role": "assistant", "content": content})
-                    messages.append(
+                    messages = [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": prompt},
+                        {"role": "assistant", "content": content},
                         {
                             "role": "user",
-                            "content": "Ответ не в формате JSON. "
-                            "Верни только корректный JSON по схеме.",
-                        }
-                    )
+                            "content": (
+                                "Ответ не в формате JSON. "
+                                "Верни только корректный JSON по схеме."
+                            ),
+                        },
+                    ]
                     continue
                 raise RecipeLLMError("Модель вернула некорректный ответ")
 
