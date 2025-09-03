@@ -22,6 +22,7 @@ load_dotenv()  # загрузка переменных окружения из .
 
 
 logging.basicConfig(level=logging.INFO)  # настройка логирования
+logger = logging.getLogger(__name__)
 
 
 INGREDIENTS, MOOD = range(2)
@@ -72,12 +73,19 @@ async def receive_mood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
             message, parse_mode="Markdown", reply_markup=ReplyKeyboardRemove()
         )
     except RecipeLLMError as exc:
+        logger.error("Ошибка генерации рецепта", exc_info=exc)
         await update.message.reply_text(
             f"Не удалось получить рецепт: {exc}", reply_markup=ReplyKeyboardRemove()
         )
 
     context.user_data.clear()
     return ConversationHandler.END
+
+
+async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Глобальный обработчик ошибок."""
+
+    logger.error("Ошибка в обработчике", exc_info=context.error)
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -109,6 +117,7 @@ def main() -> None:
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(conv_handler)
+    application.add_error_handler(error_handler)
 
     application.run_polling()
 
