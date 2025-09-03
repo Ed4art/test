@@ -14,5 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Требует система деплоя тайм веб
+EXPOSE 1234
+
 # Никаких портов — это long polling
 CMD ["python", "bot.py"]
